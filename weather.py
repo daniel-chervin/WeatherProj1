@@ -20,7 +20,7 @@ def get_weather_data(city_name, api_key):
     params = {
         "key": api_key,
         "q": city_name,
-        "aqi": "yes"  # Disable air quality data for simplicity
+        "aqi": "yes"  # include air quality data
     }
     response = requests.get(base_url, params=params)
 
