@@ -9,6 +9,8 @@ readme = "README.md"
 python = "^3.12"
 requests = "^2.32.3"
 streamlit = "^1.41.1"
+geopy = "^2.4.1"
+streamlit-folium = "^0.24.0"
 
 
 [build-system]
