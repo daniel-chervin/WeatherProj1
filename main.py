@@ -49,10 +49,28 @@ with col2:
         lat = last_clicked["lat"]
         lon = last_clicked["lng"]
         city_name = get_city_from_coords(lat, lon)
-        st.write(f"**Latitude:** {lat}")
-        st.write(f"**Longitude:** {lon}")
         st.write(f"**City Name:** {city_name}")
+        st.write(f"**Latitude:** {lat:.3f}")
+        st.write(f"**Longitude:** {lon:.3f}")
         #city_search.title(city_name)
+
+        weather_data = get_weather_data(city_name)
+
+        print(type(weather_data))
+
+        if "error" in weather_data:
+            print(f"Error: {weather_data['error']}")
+        else:
+            # Extract and display relevant weather details
+            print("\nWeather Details:")
+            st.write(f"**City:** {weather_data['location']['name']}")
+            st.write(f"**Region:** {weather_data['location']['region']}")
+            st.write(f"**Country:** {weather_data['location']['country']}")
+            st.write(f"**Temperature:** {weather_data['current']['temp_c']} °C")
+            st.write(f"**Weather:** {weather_data['current']['condition']['text']}")
+            st.write(f"**Humidity:** {weather_data['current']['humidity']}%")
+            st.write(f"**Wind Speed:** {weather_data['current']['wind_kph']} kph")
+
 
     # Display city details from search
 
@@ -61,3 +79,15 @@ with col2:
     #    st.write(f"**City Name:** {city_search}")
     #    st.write(f"**Latitude:** {coords[0]}")
     #    st.write(f"**Longitude:** {coords[1]}")
+
+
+
+# Add a second row with two columns
+row2_col1, row2_col2 = st.columns([1, 1])
+
+with row2_col1:
+    st.write("## Weather Here")
+
+with row2_col2:
+    st.write("## Historical Weather Data")
+    st.write("(Historical data integration coming soon!)")

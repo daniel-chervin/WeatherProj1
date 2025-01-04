@@ -7,6 +7,7 @@ import pytz
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
 
+import json
 
 def get_local_time(lat, lon):
     """
@@ -93,3 +94,30 @@ def get_coords_from_city(city_name):
         return None
     return None
 
+
+# Function to fetch weather data from WeatherAPI
+def get_weather_data(city_name):
+    api_key = 'a64189ecdf6d43a3b60164402250101'  # input("Enter your WeatherAPI key: ")
+
+    """
+    Fetch weather data for a specified city.
+
+    Parameters:
+        city_name (str): Name of the city to fetch weather for.
+        api_key (str): API key for WeatherAPI.
+
+    Returns:
+        dict: Parsed JSON data containing weather information, or error details.
+    """
+    base_url = "http://api.weatherapi.com/v1/current.json"
+    params = {
+        "key": api_key,
+        "q": city_name,
+        "aqi": "yes"  # include air quality data
+    }
+    response = requests.get(base_url, params=params)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return {"error": response.json().get("error", {}).get("message", "Unable to fetch weather data.")}
