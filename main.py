@@ -6,49 +6,8 @@
 import streamlit as st
 from streamlit_folium import st_folium
 import folium
-from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut
 
-# Initialize Geolocator
-def get_city_from_coords(lat, lon):
-    """
-    Get the city name from latitude and longitude coordinates.
-
-    Parameters:
-        lat (float): Latitude of the location.
-        lon (float): Longitude of the location.
-
-    Returns:
-        str: Name of the city in English or a message if not found.
-    """
-    geolocator = Nominatim(user_agent="city_locator")
-    try:
-        location = geolocator.reverse((lat, lon), exactly_one=True, language="en")
-        if location and "address" in location.raw:
-            address = location.raw["address"]
-            return address.get("city", "Unknown city")
-    except GeocoderTimedOut:
-        return "Geocoding timed out. Please try again."
-    return "City not found"
-
-def get_coords_from_city(city_name):
-    """
-    Get latitude and longitude coordinates from a city name.
-
-    Parameters:
-        city_name (str): Name of the city.
-
-    Returns:
-        tuple: Latitude and longitude of the city or None if not found.
-    """
-    geolocator = Nominatim(user_agent="city_locator")
-    try:
-        location = geolocator.geocode(city_name, exactly_one=True, language="en")
-        if location:
-            return location.latitude, location.longitude
-    except GeocoderTimedOut:
-        return None
-    return None
+from helper_functions import *
 
 # Streamlit App
 st.title("Interactive World Map to Retrieve City Names")
