@@ -84,6 +84,49 @@ def get_coords_from_city(city_name):
     return None
 
 # Function to fetch weather data from WeatherAPI
+def get_weather_data(location, query_type="current", days=1, start_date=None):
+    """
+    Query weather data from WeatherAPI.
+
+    Args:
+        api_key (str): Your WeatherAPI key.
+        location (str): Location to query (e.g., city name, zip code, or lat/lon).
+        query_type (str): Type of query ('current', 'forecast', 'history').
+        days (int): Number of days for forecast (only used if query_type is 'forecast').
+        start_date (str): Start date for historical data in 'YYYY-MM-DD' format (only used if query_type is 'history').
+
+    Returns:
+        dict: Weather data as a Python dictionary.
+    """
+    # Base URL
+    base_url = "http://api.weatherapi.com/v1"
+
+    # Endpoint selection
+    if query_type == "current":
+        endpoint = f"{base_url}/current.json"
+        params = {"key": api_key, "q": location}
+    elif query_type == "forecast":
+        endpoint = f"{base_url}/forecast.json"
+        params = {"key": api_key, "q": location, "days": days}
+    elif query_type == "history":
+        if not start_date:
+            raise ValueError("start_date is required for historical queries.")
+        endpoint = f"{base_url}/history.json"
+        params = {"key": api_key, "q": location, "dt": start_date}
+    else:
+        raise ValueError("Invalid query_type. Use 'current', 'forecast', or 'history'.")
+
+    # Make the API request
+    response = requests.get(endpoint, params=params)
+
+    # Check for a successful response
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise Exception(f"Error {response.status_code}: {response.text}")
+
+
+'''
 def get_weather_data(city_name):
 
     """
@@ -108,6 +151,7 @@ def get_weather_data(city_name):
         return response.json()
     else:
         return {"error": response.json().get("error", {}).get("message", "Unable to fetch weather data.")}
+
 
 def get_historical_weather(city_name, years):
     """
@@ -163,3 +207,5 @@ def plot_weather_data(data):
     ax1.set_xlabel("Year")
 
     st.pyplot(fig)
+
+'''

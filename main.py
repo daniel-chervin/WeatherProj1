@@ -57,30 +57,66 @@ with col2:
         local_dt = get_local_datetime(lat, lon)
         st.write(f"**Local date time:** {local_dt}")
 
-        weather_data = get_weather_data(city_name)
+        #weather_data = get_weather_data(city_name)
+        weather_data = get_weather_data(city_name, 'current')
 
-        print(type(weather_data))
+        #print(type(weather_data))
 
         if "error" in weather_data:
-            print(f"Error: {weather_data['error']}")
+            st.write(f"**Error:** {weather_data['error']}")
         else:
             # Extract and display relevant weather details
             print("\nWeather Details:")
-            st.write(f"**City:** {weather_data['location']['name']}")
-            st.write(f"**Region:** {weather_data['location']['region']}")
-            st.write(f"**Country:** {weather_data['location']['country']}")
-            st.write(f"**Temperature:** {weather_data['current']['temp_c']} °C")
-            st.write(f"**Weather:** {weather_data['current']['condition']['text']}")
-            st.write(f"**Humidity:** {weather_data['current']['humidity']}%")
-            st.write(f"**Wind Speed:** {weather_data['current']['wind_kph']} kph")
-
-
+            st.write(f"**Location:** {weather_data['location']['name']}, {weather_data['location']['country']}")
+            st.write(f"**Local Time:** {weather_data['location']['localtime']}")
+            st.write(f"**Temperature (°C):** {weather_data['current']['temp_c']}")
+            st.write(f"**Condition:** {weather_data['current']['condition']['text']}")
+            st.write(f"**Feels Like (°C):** {weather_data['current']['feelslike_c']}")
+            st.write(f"**Wind Speed (kph):** {weather_data['current']['wind_kph']}")
+            st.write(f"**Humidity (%):** {weather_data['current']['humidity']}")
+            st.write(f"**Cloud Cover (%):** {weather_data['current']['cloud']}")
+            #st.write(f"**City:** {weather_data['location']['name']}")
+            #st.write(f"**Region:** {weather_data['location']['region']}")
+            #st.write(f"**Country:** {weather_data['location']['country']}")
+            #st.write(f"**Temperature:** {weather_data['current']['temp_c']} °C")
+            #st.write(f"**Weather:** {weather_data['current']['condition']['text']}")
+            #st.write(f"**Humidity:** {weather_data['current']['humidity']}%")
+            #st.write(f"**Wind Speed:** {weather_data['current']['wind_kph']} kph")
 
 # Add a second row with two columns
 row2_col1, row2_col2 = st.columns([1, 1])
 
 with row2_col1:
-    st.write("## Weather Here")
+    st.write("## 7 days forecast")
+    forecast_data = get_weather_data(city_name, 'forecast', 7)
+    if "error" in forecast_data:
+        st.write(f"**Error:** {forecast_data['error']}")
+    else:
+        forecast_days = forecast_data["forecast"]["forecastday"]
+        forecast_list = []
+        for day in forecast_days:
+            date = day["date"]
+            day_info = day["day"]
+            forecast_list.append({
+                "Metric": ["Max Temp (°C)", "Min Temp (°C)", "Condition", "Rain Chance (%)", "Snow Chance (%)"],
+                date: [
+                    day_info["maxtemp_c"],
+                    day_info["mintemp_c"],
+                    day_info["condition"]["text"],
+                    day_info.get("daily_chance_of_rain", "N/A"),
+                    day_info.get("daily_chance_of_snow", "N/A"),
+                ],
+            })
+
+        # Combine data for transposed format
+        forecast_df = pd.concat(
+            [pd.DataFrame(item).set_index("Metric") for item in forecast_list], axis=1
+        )
+
+        st.subheader(f"Weather Forecast for {city_name}")
+        st.table(forecast_df)
+
+
 
 with row2_col2:
     st.write("## Historical Weather Data")
