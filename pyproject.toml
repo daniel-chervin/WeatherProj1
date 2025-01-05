@@ -13,6 +13,7 @@ geopy = "^2.4.1"
 streamlit-folium = "^0.24.0"
 pytz = "^2024.2"
 seaborn = "^0.13.2"
+timezonefinder = "^6.5.7"
 
 
 [build-system]

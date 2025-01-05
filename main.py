@@ -54,7 +54,7 @@ with col2:
         st.write(f"**Lat, Lon:** {lat:.3f}, {lon:.3f}")
         #st.write(f"**Longitude:** {lon:.3f}")
         #city_search.title(city_name)
-        local_dt = get_local_time(lat, lon)
+        local_dt = get_local_datetime(lat, lon)
         st.write(f"**Local date time:** {local_dt}")
 
         weather_data = get_weather_data(city_name)

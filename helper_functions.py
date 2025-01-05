@@ -12,6 +12,7 @@ from geopy.exc import GeocoderTimedOut
 import json
 import pandas as pd
 from matplotlib import pyplot as plt
+from timezonefinder import TimezoneFinder
 
 api_key = 'a64189ecdf6d43a3b60164402250101'  # input("Enter your WeatherAPI key: ")
 
