@@ -10,6 +10,7 @@ import folium
 from helper_functions import *
 
 # Streamlit App
+st.set_page_config(layout="wide")
 st.title("Interactive World Map to Retrieve City Names")
 st.write("Click on the map to retrieve the city name for the selected location, or search for a city to focus on it.")
 
@@ -50,9 +51,11 @@ with col2:
         lon = last_clicked["lng"]
         city_name = get_city_from_coords(lat, lon)
         st.write(f"**City Name:** {city_name}")
-        st.write(f"**Latitude:** {lat:.3f}")
-        st.write(f"**Longitude:** {lon:.3f}")
+        st.write(f"**Lat, Lon:** {lat:.3f}, {lon:.3f}")
+        #st.write(f"**Longitude:** {lon:.3f}")
         #city_search.title(city_name)
+        local_dt = get_local_time(lat, lon)
+        st.write(f"**Local date time:** {local_dt}")
 
         weather_data = get_weather_data(city_name)
 
@@ -70,15 +73,6 @@ with col2:
             st.write(f"**Weather:** {weather_data['current']['condition']['text']}")
             st.write(f"**Humidity:** {weather_data['current']['humidity']}%")
             st.write(f"**Wind Speed:** {weather_data['current']['wind_kph']} kph")
-
-
-    # Display city details from search
-
-    #if city_search and coords:
-    #    st.write("### City Details from Search")
-    #    st.write(f"**City Name:** {city_search}")
-    #    st.write(f"**Latitude:** {coords[0]}")
-    #    st.write(f"**Longitude:** {coords[1]}")
 
 
 
