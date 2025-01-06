@@ -12,13 +12,13 @@ from helper_functions import *
 # Streamlit App
 st.set_page_config(layout="wide")
 st.title("Interactive World Map to Retrieve City Names")
-st.write("Click on the map to retrieve the city name for the selected location, or search for a city to focus on it.")
+st.write("Click on the map to retrieve the city name for the selected location, or search for a city to focus on it then click to display the data.")
 
 # Layout with 1 row and 2 columns
-col1, col2 = st.columns([2, 1])
+row1_col1, row1_col2 = st.columns([2, 1])
 
 # Create a Folium map in the left column
-with col1:
+with row1_col1:
     map_center = [0, 0]  # Default center of the map (latitude, longitude)
     zoom_start = 2  # Default zoom level
 
@@ -43,7 +43,7 @@ with col1:
     map_data = st_folium(m, width=700, height=500)
 
 # Display selected location and city name in the right column
-with col2:
+with row1_col2:
     st.write("### Selected Location and City")
     if map_data and "last_clicked" in map_data and map_data["last_clicked"]:
         last_clicked = map_data["last_clicked"]
@@ -68,7 +68,7 @@ with col2:
             # Extract and display relevant weather details
             print("\nWeather Details:")
             st.write(f"**Location:** {weather_data['location']['name']}, {weather_data['location']['country']}")
-            st.write(f"**Local Time:** {weather_data['location']['localtime']}")
+            #st.write(f"**Local Time:** {weather_data['location']['localtime']}")
             st.write(f"**Temperature (°C):** {weather_data['current']['temp_c']}")
             st.write(f"**Condition:** {weather_data['current']['condition']['text']}")
             st.write(f"**Feels Like (°C):** {weather_data['current']['feelslike_c']}")
@@ -84,10 +84,10 @@ with col2:
             #st.write(f"**Wind Speed:** {weather_data['current']['wind_kph']} kph")
 
 # Add a second row with two columns
-row2_col1, row2_col2 = st.columns([1, 1])
+row2_col1, row2_col2 = st.columns([2, 1])
 
 with row2_col1:
-    st.write("## 7 days forecast")
+    st.write(f"## 7 days weather Forecast for {city_name}")
     forecast_data = get_weather_data(city_name, 'forecast', 7)
     if "error" in forecast_data:
         st.write(f"**Error:** {forecast_data['error']}")
@@ -113,11 +113,8 @@ with row2_col1:
             [pd.DataFrame(item).set_index("Metric") for item in forecast_list], axis=1
         )
 
-        st.subheader(f"Weather Forecast for {city_name}")
         st.table(forecast_df)
-
-
 
 with row2_col2:
     st.write("## Historical Weather Data")
-    st.write("(Historical data integration coming soon!)")
+    st.write("(N/A too cheap to pay for a proper license!)")
