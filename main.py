@@ -1,8 +1,4 @@
-# Streamlit Program to Show a World Map and Retrieve City Names
 
-# Install necessary libraries
-# poetry addquit streamlit geopy
-# Import libraries
 import streamlit as st
 from streamlit_folium import st_folium
 import folium
@@ -11,7 +7,7 @@ from helper_functions import *
 
 # Streamlit App
 st.set_page_config(layout="wide")
-st.title("Interactive World Map to Retrieve City Names")
+st.title("Select on World Map to Retrieve City Weather")
 st.write("**Click on the map** to retrieve the city name for the selected location, or search for a city to focus on it then click to display the data.")
 
 # Layout with 1 row and 2 columns
