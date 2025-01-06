@@ -61,7 +61,8 @@ with row1_col2:
         st.write(f"**Local date time:** {local_dt}")
 
         #weather_data = get_weather_data(city_name)
-        weather_data = get_weather_data(city_name, 'current')
+        location = f"{lat},{lon}"
+        weather_data = get_weather_data(location, 'current')
 
         #print(type(weather_data))
 
@@ -92,7 +93,8 @@ row2_col1, row2_col2 = st.columns([2, 1])
 with row2_col1:
     if city_name.lower() != "city not found":
         st.write(f"## 7 days weather Forecast for {city_name}")
-        forecast_data = get_weather_data(city_name, 'forecast', 7)
+        location = f"{lat},{lon}"
+        forecast_data = get_weather_data(location, 'forecast', 7)
         if "error" in forecast_data:
             st.write(f"**Error:** {forecast_data['error']}")
         else:

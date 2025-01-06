@@ -54,9 +54,9 @@ def get_city_from_coords(lat, lon):
     Returns:
         str: Name of the city in English or a message if not found.
     """
-    geolocator = Nominatim(user_agent="city_locator")
+    geolocator = Nominatim(user_agent="danielc_locator")
     try:
-        location = geolocator.reverse((lat, lon), exactly_one=True, language="en")
+        location = geolocator.reverse((lat, lon), exactly_one=True, language="en", timeout=15)
         if location and "address" in location.raw:
             address = location.raw["address"]
             return address.get("city", "Unknown city")
@@ -74,9 +74,9 @@ def get_coords_from_city(city_name):
     Returns:
         tuple: Latitude and longitude of the city or None if not found.
     """
-    geolocator = Nominatim(user_agent="city_locator")
+    geolocator = Nominatim(user_agent="danielc_locator")
     try:
-        location = geolocator.geocode(city_name, exactly_one=True, language="en")
+        location = geolocator.geocode(city_name, exactly_one=True, language="en", timeout=15)
         if location:
             return location.latitude, location.longitude
     except GeocoderTimedOut:
@@ -116,7 +116,15 @@ def get_weather_data(location, query_type="current", days=1, start_date=None):
         raise ValueError("Invalid query_type. Use 'current', 'forecast', or 'history'.")
 
     # Make the API request
-    response = requests.get(endpoint, params=params)
+
+    try:
+        response = requests.get(endpoint, params=params, timeout=15)  # Timeout is set to 10 seconds
+        response.raise_for_status()  # Raise HTTPError for bad responses (4xx and 5xx)
+        #print(response.text)
+    except requests.exceptions.Timeout:
+        raise Exception(f"Error {response.status_code}: {response.text}")
+    except requests.exceptions.RequestException as e:
+        raise Exception(f"Error {response.status_code}: {response.text}")
 
     # Check for a successful response
     if response.status_code == 200:
