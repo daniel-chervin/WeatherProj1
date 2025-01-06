@@ -12,7 +12,7 @@ from helper_functions import *
 # Streamlit App
 st.set_page_config(layout="wide")
 st.title("Interactive World Map to Retrieve City Names")
-st.write("Click on the map to retrieve the city name for the selected location, or search for a city to focus on it then click to display the data.")
+st.write("**Click on the map** to retrieve the city name for the selected location, or search for a city to focus on it then click to display the data.")
 
 # Layout with 1 row and 2 columns
 row1_col1, row1_col2 = st.columns([2, 1])
