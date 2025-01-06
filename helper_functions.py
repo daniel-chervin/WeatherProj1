@@ -89,7 +89,6 @@ def get_weather_data(location, query_type="current", days=1, start_date=None):
     Query weather data from WeatherAPI.
 
     Args:
-        api_key (str): Your WeatherAPI key.
         location (str): Location to query (e.g., city name, zip code, or lat/lon).
         query_type (str): Type of query ('current', 'forecast', 'history').
         days (int): Number of days for forecast (only used if query_type is 'forecast').
@@ -125,87 +124,3 @@ def get_weather_data(location, query_type="current", days=1, start_date=None):
     else:
         raise Exception(f"Error {response.status_code}: {response.text}")
 
-
-'''
-def get_weather_data(city_name):
-
-    """
-    Fetch weather data for a specified city.
-
-    Parameters:
-        city_name (str): Name of the city to fetch weather for.
-        api_key (str): API key for WeatherAPI.
-
-    Returns:
-        dict: Parsed JSON data containing weather information, or error details.
-    """
-    base_url = "http://api.weatherapi.com/v1/current.json"
-    params = {
-        "key": api_key,
-        "q": city_name,
-        "aqi": "yes"  # include air quality data
-    }
-    response = requests.get(base_url, params=params)
-
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return {"error": response.json().get("error", {}).get("message", "Unable to fetch weather data.")}
-
-
-def get_historical_weather(city_name, years):
-    """
-    Get historical weather data for a city over a range of years.
-
-    Parameters:
-        api_key (str): API key for WeatherAPI.
-        city_name (str): Name of the city.
-        years (list): List of years to retrieve data for.
-
-    Returns:
-        list: List of dictionaries containing year, temperature, and precipitation.
-    """
-    base_url = "http://api.weatherapi.com/v1/history.json"
-    data = []
-    for year in years:
-        date = f"{year}-01-01"
-        params = {
-            "key": api_key,
-            "q": city_name,
-            "dt": date
-        }
-        response = requests.get(base_url, params=params)
-        if response.status_code == 200:
-            weather_data = response.json()
-            if "forecast" in weather_data:
-                forecast = weather_data["forecast"]["forecastday"][0]
-                temp = forecast["day"]["avgtemp_c"]
-                precip = forecast["day"]["totalprecip_mm"]
-                data.append({"year": year, "temperature": temp, "precipitation": precip})
-    return data
-
-def plot_weather_data(data):
-    """
-    Plot weather data using seaborn.
-
-    Parameters:
-        data (list): List of dictionaries containing year, temperature, and precipitation.
-
-    Displays:
-        A seaborn graph showing temperature and precipitation over years.
-    """
-    df = pd.DataFrame(data)
-    fig, ax1 = plt.subplots(figsize=(10, 6))
-
-    sns.lineplot(data=df, x="year", y="temperature", ax=ax1, label="Temperature (°C)", color="blue")
-    ax1.set_ylabel("Temperature (°C)", color="blue")
-    ax2 = ax1.twinx()
-    sns.lineplot(data=df, x="year", y="precipitation", ax=ax2, label="Precipitation (mm)", color="green")
-    ax2.set_ylabel("Precipitation (mm)", color="green")
-
-    ax1.set_title("Historical Weather Data")
-    ax1.set_xlabel("Year")
-
-    st.pyplot(fig)
-
-'''

@@ -17,9 +17,16 @@ st.write("Click on the map to retrieve the city name for the selected location, 
 # Layout with 1 row and 2 columns
 row1_col1, row1_col2 = st.columns([2, 1])
 
+lat = 0
+lon = 0
+city_name = get_city_from_coords(lat, lon)
+
 # Create a Folium map in the left column
 with row1_col1:
-    map_center = [0, 0]  # Default center of the map (latitude, longitude)
+    #lat = 32.084
+    #lon = 34.779
+    #city_name = get_city_from_coords(lat, lon)
+    map_center = [lat, lon ]  # Default center of the map (latitude, longitude)
     zoom_start = 2  # Default zoom level
 
     # City search input
@@ -87,33 +94,30 @@ with row1_col2:
 row2_col1, row2_col2 = st.columns([2, 1])
 
 with row2_col1:
-    st.write(f"## 7 days weather Forecast for {city_name}")
-    forecast_data = get_weather_data(city_name, 'forecast', 7)
-    if "error" in forecast_data:
-        st.write(f"**Error:** {forecast_data['error']}")
-    else:
-        forecast_days = forecast_data["forecast"]["forecastday"]
-        forecast_list = []
-        for day in forecast_days:
-            date = day["date"]
-            day_info = day["day"]
-            forecast_list.append({
-                "Metric": ["Max Temp (°C)", "Min Temp (°C)", "Condition", "Rain Chance (%)", "Snow Chance (%)"],
-                date: [
-                    day_info["maxtemp_c"],
-                    day_info["mintemp_c"],
-                    day_info["condition"]["text"],
-                    day_info.get("daily_chance_of_rain", "N/A"),
-                    day_info.get("daily_chance_of_snow", "N/A"),
-                ],
-            })
+    if city_name.lower() != "city not found":
+        st.write(f"## 7 days weather Forecast for {city_name}")
+        forecast_data = get_weather_data(city_name, 'forecast', 7)
+        if "error" in forecast_data:
+            st.write(f"**Error:** {forecast_data['error']}")
+        else:
+            forecast_days = forecast_data["forecast"]["forecastday"]
+            forecast_list = []
+            for day in forecast_days:
+                date = day["date"]
+                day_info = day["day"]
+                forecast_list.append({
+                    "Metric": ["Max Temp (°C)", "Min Temp (°C)", "Condition", "Rain Chance (%)", "Snow Chance (%)"],
+                    date: [
+                        day_info["maxtemp_c"],
+                        day_info["mintemp_c"],
+                        day_info["condition"]["text"],
+                        day_info.get("daily_chance_of_rain", "N/A"),
+                        day_info.get("daily_chance_of_snow", "N/A"),
+                    ],
+                })
 
-        # Combine data for transposed format
-        forecast_df = pd.concat(
-            [pd.DataFrame(item).set_index("Metric") for item in forecast_list], axis=1
-        )
-
-        st.table(forecast_df)
+            forecast_df = pd.concat([pd.DataFrame(item).set_index("Metric") for item in forecast_list], axis=1)
+            st.table(forecast_df)
 
 with row2_col2:
     st.write("## Historical Weather Data")
