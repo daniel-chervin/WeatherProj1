@@ -159,6 +159,7 @@ with row2_col2:
             #sns.lineplot(data=forecast_df, x='Date', y='Avg Temp (°C)', label='Avg Temp (°C)', color='green', ax=ax)
             ax.set_title('Weather Trends')
             ax.set_xlabel('Date')
+            ax.grid(True, linestyle='--', alpha=0.6)
             #ax.set_ylabel('Temperature (°C)')
             ax.legend()
             st.pyplot(fig)
