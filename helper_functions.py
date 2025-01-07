@@ -5,6 +5,7 @@ import streamlit as st
 import seaborn as sns
 from datetime import datetime
 import pytz
+import geocoder
 
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
@@ -16,6 +17,33 @@ from timezonefinder import TimezoneFinder
 
 api_key = 'a64189ecdf6d43a3b60164402250101'  # input("Enter your WeatherAPI key: ")
 
+def is_valid_lat_lon(lat, lon):
+    """
+    Validate latitude and longitude values.
+
+    Args:
+        lat (float): Latitude value.
+        lon (float): Longitude value.
+
+    Returns:
+        bool: True if valid, False otherwise.
+    """
+    if -90 <= lat <= 90 and -180 <= lon <= 180:
+        return True
+    return False
+
+def get_current_location_by_ip():
+    g = geocoder.ip('me')
+    if g.ok:
+        return {
+            "lat": g.latlng[0] if g.latlng else None,
+            "lon": g.latlng[1] if g.latlng else None,
+            "city_name": g.city,
+            "region": g.state,
+            "country": g.country,
+        }
+    else:
+        return None
 
 def get_local_datetime(lat, lon):
     """
@@ -54,6 +82,10 @@ def get_city_from_coords(lat, lon):
     Returns:
         str: Name of the city in English or a message if not found.
     """
+    address = "City not found"
+    if not is_valid_lat_lon(lat, lon):
+        return address
+
     geolocator = Nominatim(user_agent="danielc_locator")
     try:
         location = geolocator.reverse((lat, lon), exactly_one=True, language="en", timeout=15)
@@ -62,7 +94,7 @@ def get_city_from_coords(lat, lon):
             return address.get("city", "Unknown city")
     except GeocoderTimedOut:
         return "Geocoding timed out. Please try again."
-    return "City not found"
+    return address
 
 def get_coords_from_city(city_name):
     """
@@ -131,4 +163,5 @@ def get_weather_data(location, query_type="current", days=1, start_date=None):
         return response.json()
     else:
         raise Exception(f"Error {response.status_code}: {response.text}")
+
 
