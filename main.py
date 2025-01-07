@@ -38,6 +38,7 @@ with row1_col1:
         coords = get_coords_from_city(city_search)
         if coords:
             map_center = [coords[0], coords[1]]
+            lat = coords[0]; lon = coords[1]
             zoom_start = 12
         else:
             st.write("City not found. Please try another city.")
@@ -48,7 +49,8 @@ with row1_col1:
     # Add marker if city is found
     if city_search and coords:
         folium.Marker(location=coords, popup=city_search).add_to(m)
-
+    elif is_valid_lat_lon(lat, lon):
+        folium.Marker(location=[lat, lon], popup=city_search).add_to(m)
     # Add Folium map to Streamlit
     map_data = st_folium(m, width=700, height=500)
 
