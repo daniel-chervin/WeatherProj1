@@ -108,7 +108,7 @@ if is_valid_lat_lon(lat, lon):
 with row2_col1:
     #if city_name.lower() != "city not found":
     if is_valid_lat_lon(lat, lon):
-        st.write(f"## 7 days weather Forecast for {city_name}")
+        st.write(f"## 7 Days Weather Forecast for {city_name}")
         #location = f"{lat},{lon}"
         #forecast_data = get_weather_data(location, 'forecast', 7)
         if "error" in forecast_data:
@@ -152,7 +152,7 @@ with row2_col2:
                     "Condition": day['day']['condition']['text']
                 })
             forecast_df = pd.DataFrame(forecast_list)
-            st.write("## 7 days Weather trends")
+            st.write("## 7 Days Weather Trends")
             fig, ax = plt.subplots(figsize=(12, 6))
             sns.lineplot(data=forecast_df, x='Date', y='Max Temp (°C)', label='Max Temp (°C)', color='red', ax=ax)
             sns.lineplot(data=forecast_df, x='Date', y='Min Temp (°C)', label='Min Temp (°C)', color='blue', ax=ax)
