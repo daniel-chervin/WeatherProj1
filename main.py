@@ -33,7 +33,7 @@ with row1_col1:
     zoom_start = 12  # Default zoom level
 
     # City search input
-    city_search = st.text_input("Search for a city:")
+    city_search = st.text_input("Search for a city then **SELECT** it on the map:")
     if city_search:
         coords = get_coords_from_city(city_search)
         if coords:
