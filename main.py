@@ -32,6 +32,8 @@ with row1_col1:
     map_center = [lat, lon ]  # Default center of the map (latitude, longitude)
     zoom_start = 12  # Default zoom level
 
+    ########
+    #a change
     # City search input
     city_search = st.text_input("Search for a city then **SELECT** it on the map:")
     if city_search:
