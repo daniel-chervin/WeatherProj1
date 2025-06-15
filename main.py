@@ -7,7 +7,7 @@ from helper_functions import *
 
 # Streamlit App
 st.set_page_config(layout="wide")
-st.title("Select 11 on World Map to Retrieve City Weather")
+st.title("Select on World Map to Retrieve City Weather")
 st.write("**Click on the map** to retrieve the city name for the selected location, or search for a city to focus on it then click to display the data.")
 
 # Layout with 1 row and 2 columns
